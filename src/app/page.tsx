@@ -1,6 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import TRFlag from "./TRFlag";
+import ENFlag from "./ENFlag";
 
 // Particle type tanımlaması
 interface Particle {
@@ -11,11 +13,30 @@ interface Particle {
   animationDuration: number;
 }
 
+// Dil metinleri
+const translations = {
+  tr: {
+    brandName: "JENESIS",
+    description:
+      "1984'den bugüne sürekli gelişen şirketimizin web sayfasını da sizler için yeniliyoruz",
+    status: "Yakında Hizmetinizdeyiz",
+  },
+  en: {
+    brandName: "JENESIS",
+    description:
+      "We are also updating our website for you, our company that has been continuously developing from 1984 to today",
+    status: "Coming Soon",
+  },
+};
+
+type Language = "tr" | "en";
+
 export default function ComingSoon() {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [particles, setParticles] = useState<Particle[]>([]);
   const [isClient, setIsClient] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [language, setLanguage] = useState<Language>("tr"); // Default Türkçe
 
   useEffect(() => {
     setIsClient(true);
@@ -48,7 +69,7 @@ export default function ComingSoon() {
     // Mobilde mouse tracking'i devre dışı bırak
     if (isMobile) return;
 
-    const handleMouseMove = (e: { clientX: number; clientY: number }) => {
+    const handleMouseMove = (e: MouseEvent) => {
       setMousePosition({ x: e.clientX, y: e.clientY });
     };
 
@@ -56,8 +77,43 @@ export default function ComingSoon() {
     return () => window.removeEventListener("mousemove", handleMouseMove);
   }, [isMobile]);
 
+  const handleLanguageChange = (lang: Language) => {
+    setLanguage(lang);
+  };
+
+  const t = translations[language];
+
   return (
     <div className="min-h-screen bg-black relative overflow-hidden">
+      {/* Language Selector - Sağ Üst */}
+      <div className="absolute top-4 right-4 sm:top-6 sm:right-6 lg:top-8 lg:right-8 z-50 flex items-center gap-2 sm:gap-3">
+        <div
+          className={`transition-all duration-200 ${
+            language === "tr"
+              ? "opacity-100 scale-110 ring-2 ring-white/30 rounded"
+              : "opacity-70 hover:opacity-100"
+          }`}
+        >
+          <TRFlag
+            onClick={() => handleLanguageChange("tr")}
+            className="drop-shadow-lg"
+          />
+        </div>
+        <div className="w-px h-4 bg-white/20"></div>
+        <div
+          className={`transition-all duration-200 ${
+            language === "en"
+              ? "opacity-100 scale-110 ring-2 ring-white/30 rounded"
+              : "opacity-70 hover:opacity-100"
+          }`}
+        >
+          <ENFlag
+            onClick={() => handleLanguageChange("en")}
+            className="drop-shadow-lg"
+          />
+        </div>
+      </div>
+
       {/* Moving mouse cursor effect - sadece desktop'ta */}
       {!isMobile && (
         <div
@@ -113,7 +169,7 @@ export default function ComingSoon() {
       </div>
 
       {/* Rotating Gears - Responsive positioning */}
-      <div className="absolute top-10 right-4 sm:top-16 sm:right-8 lg:top-20 lg:right-20 opacity-10 sm:opacity-20">
+      <div className="absolute top-16 right-4 sm:top-20 sm:right-8 lg:top-24 lg:right-20 opacity-10 sm:opacity-20">
         <div className="w-16 h-16 sm:w-24 sm:h-24 lg:w-32 lg:h-32 animate-spin-slow">
           <svg
             viewBox="0 0 100 100"
@@ -168,17 +224,18 @@ export default function ComingSoon() {
         {/* Brand Name */}
         <div className="animate-fade-in mb-6 sm:mb-8">
           <h1 className="text-4xl xs:text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-bold text-white font-mono tracking-wider leading-none">
-            JENESIS
+            {t.brandName}
           </h1>
           <div className="w-16 sm:w-24 lg:w-32 h-0.5 sm:h-1 bg-gradient-to-r from-transparent via-white to-transparent mx-auto mt-2 sm:mt-4"></div>
         </div>
 
         {/* Company Description */}
         <div className="animate-fade-in-delayed-2 mb-8 sm:mb-12 max-w-xs sm:max-w-lg lg:max-w-2xl px-2">
-          <p className="text-sm sm:text-base md:text-lg lg:text-xl text-gray-400 leading-relaxed font-light">
-            1984&apos;den bugüne sürekli gelişen şirketimizin web sayfasını da
-            sizler için yeniliyoruz
-          </p>
+          <div className="h-16 sm:h-20 lg:h-24 flex items-center justify-center">
+            <p className="text-sm sm:text-base md:text-lg lg:text-xl text-gray-400 leading-relaxed font-light text-center">
+              {t.description}
+            </p>
+          </div>
         </div>
 
         {/* Progress Bar */}
@@ -195,7 +252,7 @@ export default function ComingSoon() {
         {/* Status Text */}
         <div className="animate-opacity-sync">
           <p className="text-gray-500 text-xs sm:text-sm font-mono tracking-widest">
-            Yakında Hizmetinizdeyiz
+            {t.status}
           </p>
         </div>
       </div>
