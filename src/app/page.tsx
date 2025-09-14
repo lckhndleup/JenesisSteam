@@ -4,59 +4,98 @@ import { useState, useEffect } from "react";
 
 export default function ComingSoon() {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const [particles, setParticles] = useState([]);
+  const [isClient, setIsClient] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
+    setIsClient(true);
+
+    // Cihaz tipini kontrol et
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+
+    // Mobilde daha az particle oluştur
+    const particleCount =
+      window.innerWidth < 768 ? 15 : window.innerWidth < 1024 ? 20 : 25;
+
+    const newParticles = [...Array(particleCount)].map((_, i) => ({
+      id: i,
+      left: Math.random() * 100,
+      top: Math.random() * 100,
+      animationDelay: Math.random() * 5,
+      animationDuration: 2 + Math.random() * 3,
+    }));
+    setParticles(newParticles);
+
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
+  useEffect(() => {
+    // Mobilde mouse tracking'i devre dışı bırak
+    if (isMobile) return;
+
+    const handleMouseMove = (e) => {
       setMousePosition({ x: e.clientX, y: e.clientY });
     };
 
     window.addEventListener("mousemove", handleMouseMove);
     return () => window.removeEventListener("mousemove", handleMouseMove);
-  }, []);
+  }, [isMobile]);
 
   return (
     <div className="min-h-screen bg-black relative overflow-hidden">
-      {/* Moving mouse cursor effect */}
-      <div
-        className="absolute w-96 h-96 rounded-full bg-gradient-to-r from-gray-800/10 to-gray-600/10 blur-3xl transition-all duration-300 ease-out pointer-events-none"
-        style={{
-          transform: `translate(${mousePosition.x * 0.1}px, ${
-            mousePosition.y * 0.1
-          }px)`,
-        }}
-      ></div>
+      {/* Moving mouse cursor effect - sadece desktop'ta */}
+      {!isMobile && (
+        <div
+          className="absolute w-48 h-48 lg:w-96 lg:h-96 rounded-full bg-gradient-to-r from-gray-800/10 to-gray-600/10 blur-3xl transition-all duration-300 ease-out pointer-events-none"
+          style={{
+            transform: `translate(${mousePosition.x * 0.1}px, ${
+              mousePosition.y * 0.1
+            }px)`,
+          }}
+        ></div>
+      )}
 
       {/* Floating particles */}
-      <div className="absolute inset-0">
-        {[...Array(25)].map((_, i) => (
-          <div
-            key={i}
-            className="absolute w-1 h-1 bg-white/20 rounded-full animate-pulse"
-            style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-              animationDelay: `${Math.random() * 5}s`,
-              animationDuration: `${2 + Math.random() * 3}s`,
-            }}
-          ></div>
-        ))}
-      </div>
+      {isClient && (
+        <div className="absolute inset-0">
+          {particles.map((particle) => (
+            <div
+              key={particle.id}
+              className="absolute w-0.5 h-0.5 sm:w-1 sm:h-1 bg-white/20 rounded-full animate-pulse"
+              style={{
+                left: `${particle.left}%`,
+                top: `${particle.top}%`,
+                animationDelay: `${particle.animationDelay}s`,
+                animationDuration: `${particle.animationDuration}s`,
+              }}
+            ></div>
+          ))}
+        </div>
+      )}
 
       {/* Mechanical Grid Pattern */}
-      <div className="absolute inset-0 opacity-10">
+      <div className="absolute inset-0 opacity-5 sm:opacity-10">
         <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
           <defs>
             <pattern
               id="grid"
-              width="50"
-              height="50"
+              width="30"
+              height="30"
               patternUnits="userSpaceOnUse"
+              className="sm:w-12 sm:h-12"
             >
               <path
-                d="M 50 0 L 0 0 0 50"
+                d="M 30 0 L 0 0 0 30"
                 fill="none"
                 stroke="white"
-                strokeWidth="0.5"
+                strokeWidth="0.3"
+                className="sm:stroke-[0.5]"
               />
             </pattern>
           </defs>
@@ -64,9 +103,9 @@ export default function ComingSoon() {
         </svg>
       </div>
 
-      {/* Rotating Gears */}
-      <div className="absolute top-20 right-20 opacity-20">
-        <div className="w-32 h-32 animate-spin-slow">
+      {/* Rotating Gears - Responsive positioning */}
+      <div className="absolute top-10 right-4 sm:top-16 sm:right-8 lg:top-20 lg:right-20 opacity-10 sm:opacity-20">
+        <div className="w-16 h-16 sm:w-24 sm:h-24 lg:w-32 lg:h-32 animate-spin-slow">
           <svg
             viewBox="0 0 100 100"
             fill="none"
@@ -90,8 +129,8 @@ export default function ComingSoon() {
         </div>
       </div>
 
-      <div className="absolute bottom-20 left-20 opacity-15">
-        <div className="w-24 h-24 animate-spin-reverse">
+      <div className="absolute bottom-10 left-4 sm:bottom-16 sm:left-8 lg:bottom-20 lg:left-20 opacity-8 sm:opacity-15">
+        <div className="w-12 h-12 sm:w-20 sm:h-20 lg:w-24 lg:h-24 animate-spin-reverse">
           <svg
             viewBox="0 0 100 100"
             fill="none"
@@ -116,110 +155,79 @@ export default function ComingSoon() {
       </div>
 
       {/* Main Content */}
-      <div className="relative z-10 flex flex-col items-center justify-center min-h-screen text-center px-6">
-        {/* Technical Header */}
-        <div className="mb-12 animate-fade-in">
-          <div className="flex items-center justify-center space-x-4 mb-6">
-            <div className="w-16 h-px bg-white/40"></div>
-            <span className="text-sm uppercase tracking-[0.4em] text-white/60 font-mono">
-              MECHANICAL ENGINEERING
-            </span>
-            <div className="w-16 h-px bg-white/40"></div>
+      <div className="relative z-10 flex flex-col items-center justify-center min-h-screen px-4 sm:px-6 lg:px-4 text-center">
+        {/* Brand Name */}
+        <div className="animate-fade-in mb-6 sm:mb-8">
+          <h1 className="text-4xl xs:text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-bold text-white font-mono tracking-wider leading-none">
+            JENESIS
+          </h1>
+          <div className="w-16 sm:w-24 lg:w-32 h-0.5 sm:h-1 bg-gradient-to-r from-transparent via-white to-transparent mx-auto mt-2 sm:mt-4"></div>
+        </div>
+
+        {/* Company Description */}
+        <div className="animate-fade-in-delayed-2 mb-8 sm:mb-12 max-w-xs sm:max-w-lg lg:max-w-2xl px-2">
+          <p className="text-sm sm:text-base md:text-lg lg:text-xl text-gray-400 leading-relaxed font-light">
+            1984&apos;den bugüne sürekli gelişen şirketimizin web sayfasını da
+            sizler için yeniliyoruz
+          </p>
+        </div>
+
+        {/* Progress Bar */}
+        <div className="animate-fade-in-delayed-3 w-full max-w-xs sm:max-w-sm lg:max-w-md mb-6 sm:mb-8 px-4 sm:px-0">
+          <div className="flex justify-between text-sm text-gray-500 mb-2">
+            {/* <span>İlerleme</span> */}
+            {/* <span>75%</span> */}
+          </div>
+          <div className="w-full bg-gray-800 rounded-full h-1.5 sm:h-2">
+            <div className="bg-gradient-to-r from-gray-600 to-white h-1.5 sm:h-2 rounded-full animate-progress-load"></div>
           </div>
         </div>
 
-        {/* Main Logo with Technical Design */}
-        <div className="mb-12 animate-fade-in-delayed">
-          <div className="relative">
-            <h1 className="text-6xl md:text-7xl lg:text-8xl font-bold text-white mb-4 tracking-tight font-mono">
-              JENESIS
-            </h1>
-            {/* Technical underline */}
-            <div className="flex items-center justify-center space-x-2">
-              <div className="w-8 h-px bg-white/60"></div>
-              <div className="w-3 h-3 border border-white/60 rotate-45"></div>
-              <div className="w-24 h-px bg-white/60"></div>
-              <div className="w-3 h-3 border border-white/60 rotate-45"></div>
-              <div className="w-8 h-px bg-white/60"></div>
-            </div>
-          </div>
-        </div>
-
-        {/* Engineering Status */}
-        <div className="mb-16 animate-fade-in-delayed-2">
-          <div className="bg-white/5 backdrop-blur-sm border border-white/20 rounded-lg px-8 py-6 max-w-lg mx-auto">
-            <h2 className="text-2xl md:text-3xl text-white font-light tracking-wide mb-3">
-              SYSTEM IN DEVELOPMENT
-            </h2>
-            <p className="text-white/70 text-sm font-mono mb-4">
-              Engineering precision meets innovative design
-            </p>
-
-            {/* Progress Bar */}
-            <div className="relative">
-              <div className="flex justify-between text-xs text-white/50 mb-2 font-mono">
-                <span>PROGRESS</span>
-                <span>73%</span>
-              </div>
-              <div className="w-full bg-white/20 h-1 rounded-full overflow-hidden">
-                <div className="h-full bg-gradient-to-r from-blue-500 to-cyan-400 rounded-full animate-progress-load"></div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Technical Specs */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12 animate-fade-in-delayed-3">
-          <div className="text-center">
-            <div className="text-2xl font-bold text-white mb-1">PRECISION</div>
-            <div className="text-sm text-white/60 font-mono">±0.001mm</div>
-          </div>
-          <div className="text-center">
-            <div className="text-2xl font-bold text-white mb-1">INNOVATION</div>
-            <div className="text-sm text-white/60 font-mono">NEXT-GEN</div>
-          </div>
-          <div className="text-center">
-            <div className="text-2xl font-bold text-white mb-1">EFFICIENCY</div>
-            <div className="text-sm text-white/60 font-mono">99.7%</div>
-          </div>
-        </div>
-
-        {/* Launch Info */}
-        <div className="animate-fade-in-delayed-4">
-          <div className="text-white/40 text-sm font-mono uppercase tracking-widest mb-8">
-            [ EXPECTED LAUNCH: Q1 2025 ]
-          </div>
-
-          {/* Explore Button */}
-          <button
-            onClick={() => (window.location.href = "/explore")}
-            className="group relative px-8 py-4 bg-white/10 backdrop-blur-sm border border-white/20 rounded-lg text-white font-mono uppercase tracking-wider hover:bg-white/20 hover:border-white/40 transition-all duration-300 transform hover:scale-105"
-          >
-            <span className="relative z-10">Explore Technology</span>
-            <div className="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-cyan-400/20 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-          </button>
+        {/* Status Text */}
+        <div className="animate-opacity-sync">
+          <p className="text-gray-500 text-xs sm:text-sm font-mono tracking-widest">
+            Yakında Hizmetinizdeyiz
+          </p>
         </div>
       </div>
 
       <style jsx>{`
+        @import url("https://db.onlinewebfonts.com/c/29d7ec48c3b7b1104c253419abdd6d39?family=Space+Colony+W03+SemiBold");
+
+        * {
+          font-family: "Space Colony W03 SemiBold", monospace !important;
+        }
+
+        /* Mobile First Animations */
         @keyframes fade-in {
           from {
             opacity: 0;
-            transform: translateY(30px);
+            transform: translateY(20px);
           }
           to {
             opacity: 1;
             transform: translateY(0);
           }
         }
+
         @keyframes progress-load {
           from {
             width: 0%;
           }
           to {
-            width: 73%;
+            width: 75%;
           }
         }
+
+        @keyframes opacity-sync {
+          from {
+            opacity: 0;
+          }
+          to {
+            opacity: 1;
+          }
+        }
+
         @keyframes spin-slow {
           from {
             transform: rotate(0deg);
@@ -228,6 +236,7 @@ export default function ComingSoon() {
             transform: rotate(360deg);
           }
         }
+
         @keyframes spin-reverse {
           from {
             transform: rotate(360deg);
@@ -236,29 +245,125 @@ export default function ComingSoon() {
             transform: rotate(0deg);
           }
         }
+
         .animate-fade-in {
-          animation: fade-in 1.2s ease-out;
+          animation: fade-in 1s ease-out;
         }
+
         .animate-fade-in-delayed {
-          animation: fade-in 1.2s ease-out 0.3s both;
+          animation: fade-in 1s ease-out 0.2s both;
         }
+
         .animate-fade-in-delayed-2 {
-          animation: fade-in 1.2s ease-out 0.6s both;
+          animation: fade-in 1s ease-out 0.4s both;
         }
+
         .animate-fade-in-delayed-3 {
-          animation: fade-in 1.2s ease-out 0.9s both;
+          animation: fade-in 1s ease-out 0.6s both;
         }
-        .animate-fade-in-delayed-4 {
-          animation: fade-in 1.2s ease-out 1.2s both;
-        }
+
         .animate-progress-load {
-          animation: progress-load 3s ease-out 1.5s both;
+          animation: progress-load 3s ease-out 1s both;
         }
+
+        .animate-opacity-sync {
+          animation: opacity-sync 3s ease-out 1s both;
+        }
+
         .animate-spin-slow {
-          animation: spin-slow 20s linear infinite;
+          animation: spin-slow 30s linear infinite;
         }
+
         .animate-spin-reverse {
-          animation: spin-reverse 15s linear infinite;
+          animation: spin-reverse 25s linear infinite;
+        }
+
+        /* Extra Small Devices (phones, 320px and up) */
+        @media (max-width: 374px) {
+          .animate-fade-in {
+            animation-duration: 0.8s;
+          }
+          .animate-fade-in-delayed-2,
+          .animate-fade-in-delayed-3 {
+            animation-duration: 0.8s;
+          }
+        }
+
+        /* Small devices (landscape phones, 576px and up) */
+        @media (min-width: 576px) {
+          @keyframes fade-in {
+            from {
+              opacity: 0;
+              transform: translateY(30px);
+            }
+            to {
+              opacity: 1;
+              transform: translateY(0);
+            }
+          }
+
+          .animate-fade-in {
+            animation-duration: 1.2s;
+          }
+
+          .animate-fade-in-delayed {
+            animation: fade-in 1.2s ease-out 0.3s both;
+          }
+
+          .animate-fade-in-delayed-2 {
+            animation: fade-in 1.2s ease-out 0.6s both;
+          }
+
+          .animate-fade-in-delayed-3 {
+            animation: fade-in 1.2s ease-out 0.9s both;
+          }
+
+          .animate-progress-load {
+            animation: progress-load 4s ease-out 1.5s both;
+          }
+
+          .animate-opacity-sync {
+            animation: opacity-sync 4s ease-out 1.5s both;
+          }
+        }
+
+        /* Large devices (desktops, 992px and up) */
+        @media (min-width: 992px) {
+          .animate-spin-slow {
+            animation: spin-slow 20s linear infinite;
+          }
+
+          .animate-spin-reverse {
+            animation: spin-reverse 15s linear infinite;
+          }
+        }
+
+        /* Reduced motion preferences */
+        @media (prefers-reduced-motion: reduce) {
+          .animate-spin-slow,
+          .animate-spin-reverse {
+            animation-duration: 60s;
+          }
+
+          .animate-fade-in,
+          .animate-fade-in-delayed,
+          .animate-fade-in-delayed-2,
+          .animate-fade-in-delayed-3 {
+            animation-duration: 0.5s;
+          }
+        }
+
+        /* Portrait orientation adjustments */
+        @media (orientation: portrait) and (max-height: 667px) {
+          .animate-fade-in {
+            animation-delay: 0s;
+          }
+          .animate-fade-in-delayed-2 {
+            animation-delay: 0.2s;
+          }
+          .animate-fade-in-delayed-3 {
+            animation-delay: 0.4s;
+          }
         }
       `}</style>
     </div>
