@@ -13,9 +13,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "JENESIS - Yakında Hizmetinizdeyiz",
+  title: "Jenesis - Buhar Jenaratörü | Buhar Kazanı | Verimli Buhar Üretimi",
   description:
-    "1984'den bugüne sürekli gelişen şirketimizin web sayfasını da sizler için yeniliyoruz",
+    "1984'ten bu yana endüstriyel buhar çözümlerinde güvenilir ortağınız. Jenesis ile enerji tasarruflu buhar jeneratörleri ve kesintisiz üretim garantisi.",
 };
 
 export default function RootLayout({
