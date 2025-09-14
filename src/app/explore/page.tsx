@@ -240,8 +240,9 @@ export default function ExplorePage() {
             <h2 className="text-4xl md:text-6xl font-bold mb-8">
               READY TO BUILD?
             </h2>
+
             <p className="text-xl text-white/70 mb-8">
-              Let's engineer the future together
+              {"Let's engineer the future together"}
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
