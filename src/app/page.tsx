@@ -2,9 +2,18 @@
 
 import { useState, useEffect } from "react";
 
+// Particle type tanımlaması
+interface Particle {
+  id: number;
+  left: number;
+  top: number;
+  animationDelay: number;
+  animationDuration: number;
+}
+
 export default function ComingSoon() {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-  const [particles, setParticles] = useState([]);
+  const [particles, setParticles] = useState<Particle[]>([]);
   const [isClient, setIsClient] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
 
@@ -39,7 +48,7 @@ export default function ComingSoon() {
     // Mobilde mouse tracking'i devre dışı bırak
     if (isMobile) return;
 
-    const handleMouseMove = (e) => {
+    const handleMouseMove = (e: { clientX: number; clientY: number }) => {
       setMousePosition({ x: e.clientX, y: e.clientY });
     };
 
