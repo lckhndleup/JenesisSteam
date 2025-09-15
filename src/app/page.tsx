@@ -19,14 +19,14 @@ const translations = {
     brandName: "JENESIS",
     subTitle: "BUHAR JENERATÖRLERİ",
     description:
-      "1984'den bugüne sürekli gelişen şirketimizin web sayfasını da sizler için yeniliyoruz",
+      "1984'den bugüne sürekli gelişen şirketimizin web sayfasını sizler için yeniliyoruz",
     status: "Yakında Hizmetinizdeyiz",
   },
   en: {
     brandName: "JENESIS",
     subTitle: "STEAM GENERATORS",
     description:
-      "We are also updating our website for you, our company that has been continuously developing from 1984 to today",
+      "We’re updating our company’s website for you, as we’ve been continuously evolving since 1984.",
     status: "Coming Soon",
   },
 };
@@ -84,7 +84,7 @@ export default function ComingSoon() {
   return (
     <div
       className="min-h-screen relative overflow-hidden"
-      style={{ backgroundColor: "#2C2C2C" }}
+      style={{ backgroundColor: "#27282A" }}
     >
       {/* Font preload link */}
       <link
