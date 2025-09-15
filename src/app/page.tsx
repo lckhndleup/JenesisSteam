@@ -34,7 +34,6 @@ const translations = {
 type Language = "tr" | "en";
 
 export default function ComingSoon() {
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [particles, setParticles] = useState<Particle[]>([]);
   const [isClient, setIsClient] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
@@ -75,18 +74,6 @@ export default function ComingSoon() {
 
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
-
-  useEffect(() => {
-    // Mobilde mouse tracking'i devre dışı bırak
-    if (isMobile) return;
-
-    const handleMouseMove = (e: MouseEvent) => {
-      setMousePosition({ x: e.clientX, y: e.clientY });
-    };
-
-    window.addEventListener("mousemove", handleMouseMove);
-    return () => window.removeEventListener("mousemove", handleMouseMove);
-  }, [isMobile]);
 
   const handleLanguageChange = (lang: Language) => {
     setLanguage(lang);
@@ -139,18 +126,6 @@ export default function ComingSoon() {
         </div>
       </div>
 
-      {/* Moving mouse cursor effect - sadece desktop'ta */}
-      {!isMobile && (
-        <div
-          className="absolute w-48 h-48 lg:w-96 lg:h-96 rounded-full bg-gradient-to-r from-gray-800/10 to-gray-600/10 blur-3xl transition-all duration-300 ease-out pointer-events-none"
-          style={{
-            transform: `translate(${mousePosition.x * 0.1}px, ${
-              mousePosition.y * 0.1
-            }px)`,
-          }}
-        ></div>
-      )}
-
       {/* Floating particles */}
       {isClient && (
         <div className="absolute inset-0">
@@ -193,30 +168,16 @@ export default function ComingSoon() {
         </svg>
       </div>
 
-      {/* Rotating Gears - Rengi güncellendi */}
-      <div className="absolute top-16 right-4 sm:top-20 sm:right-8 lg:top-24 lg:right-20 opacity-20 sm:opacity-30">
+      {/* Rotating Gears - JENESIS rengiyle, tam net */}
+      <div className="absolute top-16 right-4 sm:top-20 sm:right-8 lg:top-24 lg:right-20 opacity-100">
         <div className="w-16 h-16 sm:w-24 sm:h-24 lg:w-32 lg:h-32 animate-spin-slow">
           <svg
             viewBox="0 0 100 100"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
           >
-            <circle
-              cx="50"
-              cy="50"
-              r="40"
-              stroke="#BC461B"
-              strokeWidth="2"
-              strokeOpacity="0.5"
-            />
-            <circle
-              cx="50"
-              cy="50"
-              r="30"
-              stroke="#BC461B"
-              strokeWidth="1"
-              strokeOpacity="0.3"
-            />
+            <circle cx="50" cy="50" r="40" stroke="#BC461B" strokeWidth="2" />
+            <circle cx="50" cy="50" r="30" stroke="#BC461B" strokeWidth="1" />
             {[...Array(8)].map((_, i) => (
               <line
                 key={i}
@@ -226,7 +187,6 @@ export default function ComingSoon() {
                 y2="20"
                 stroke="#BC461B"
                 strokeWidth="2"
-                strokeOpacity="0.4"
                 transform={`rotate(${i * 45} 50 50)`}
               />
             ))}
@@ -234,29 +194,15 @@ export default function ComingSoon() {
         </div>
       </div>
 
-      <div className="absolute bottom-10 left-4 sm:bottom-16 sm:left-8 lg:bottom-20 lg:left-20 opacity-15 sm:opacity-25">
+      <div className="absolute bottom-10 left-4 sm:bottom-16 sm:left-8 lg:bottom-20 lg:left-20 opacity-100">
         <div className="w-12 h-12 sm:w-20 sm:h-20 lg:w-24 lg:h-24 animate-spin-reverse">
           <svg
             viewBox="0 0 100 100"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
           >
-            <circle
-              cx="50"
-              cy="50"
-              r="35"
-              stroke="#BC461B"
-              strokeWidth="2"
-              strokeOpacity="0.5"
-            />
-            <circle
-              cx="50"
-              cy="50"
-              r="25"
-              stroke="#BC461B"
-              strokeWidth="1"
-              strokeOpacity="0.3"
-            />
+            <circle cx="50" cy="50" r="35" stroke="#BC461B" strokeWidth="2" />
+            <circle cx="50" cy="50" r="25" stroke="#BC461B" strokeWidth="1" />
             {[...Array(6)].map((_, i) => (
               <line
                 key={i}
@@ -266,7 +212,6 @@ export default function ComingSoon() {
                 y2="25"
                 stroke="#BC461B"
                 strokeWidth="2"
-                strokeOpacity="0.4"
                 transform={`rotate(${i * 60} 50 50)`}
               />
             ))}
@@ -292,9 +237,9 @@ export default function ComingSoon() {
             {t.brandName}
           </h1>
 
-          {/* Alt Başlık - BUHAR JENERATÖRLERİ */}
+          {/* Alt Başlık - BUHAR JENERATÖRLERİ - Küçültülmüş */}
           <h2
-            className="text-lg xs:text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold font-mono tracking-widest mt-2 sm:mt-3"
+            className="text-xs xs:text-sm sm:text-base md:text-lg lg:text-xl font-bold font-mono tracking-widest mt-2 sm:mt-3"
             style={{
               color: "#4D4B4C",
               fontFamily: "'Space Colony W03 SemiBold', monospace",
@@ -310,7 +255,7 @@ export default function ComingSoon() {
         <div className="animate-fade-in-delayed-2 mb-8 sm:mb-12 max-w-xs sm:max-w-lg lg:max-w-2xl px-2">
           <div className="h-16 sm:h-20 lg:h-24 flex items-center justify-center">
             <p
-              className="text-sm sm:text-base md:text-lg lg:text-xl text-gray-400 leading-relaxed font-light text-center"
+              className="text-xs sm:text-xs md:text-sm lg:text-base text-gray-400 leading-relaxed font-light text-center"
               style={{ fontFamily: "'Space Colony W03 SemiBold', monospace" }}
             >
               {t.description}
@@ -318,14 +263,14 @@ export default function ComingSoon() {
           </div>
         </div>
 
-        {/* Progress Bar */}
+        {/* Progress Bar - Yeni tasarım */}
         <div className="animate-fade-in-delayed-3 w-full max-w-xs sm:max-w-sm lg:max-w-md mb-6 sm:mb-8 px-4 sm:px-0">
           <div className="flex justify-between text-sm text-gray-500 mb-2">
             {/* <span>İlerleme</span> */}
             {/* <span>75%</span> */}
           </div>
-          <div className="w-full bg-gray-700 rounded-full h-1.5 sm:h-2">
-            <div className="bg-gradient-to-r from-[#BC461B] to-[#E85A2C] h-1.5 sm:h-2 rounded-full animate-progress-load"></div>
+          <div className="w-full h-0.5 sm:h-1 bg-gradient-to-r from-transparent via-gray-700 to-transparent relative">
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-[#BC461B] to-transparent animate-progress-load"></div>
           </div>
         </div>
 
