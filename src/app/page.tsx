@@ -239,7 +239,7 @@ export default function ComingSoon() {
 
           {/* Alt Başlık - BUHAR JENERATÖRLERİ - Küçültülmüş */}
           <h2
-            className="text-xs xs:text-sm sm:text-base md:text-lg lg:text-xl font-bold font-mono tracking-widest mt-2 sm:mt-3"
+            className="text-xs xs:text-sm sm:text-base md:text-lg lg:text-3xl font-bold font-mono tracking-widest mt-2 sm:mt-3"
             style={{
               color: "#4D4B4C",
               fontFamily: "'Space Colony W03 SemiBold', monospace",
