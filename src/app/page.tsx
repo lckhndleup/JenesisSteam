@@ -17,12 +17,14 @@ interface Particle {
 const translations = {
   tr: {
     brandName: "JENESIS",
+    subTitle: "BUHAR JENERATÖRLERİ",
     description:
       "1984'den bugüne sürekli gelişen şirketimizin web sayfasını da sizler için yeniliyoruz",
     status: "Yakında Hizmetinizdeyiz",
   },
   en: {
     brandName: "JENESIS",
+    subTitle: "STEAM GENERATORS",
     description:
       "We are also updating our website for you, our company that has been continuously developing from 1984 to today",
     status: "Coming Soon",
@@ -37,9 +39,18 @@ export default function ComingSoon() {
   const [isClient, setIsClient] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [language, setLanguage] = useState<Language>("tr"); // Default Türkçe
+  const [fontLoaded, setFontLoaded] = useState(false);
 
   useEffect(() => {
     setIsClient(true);
+
+    // Font yükleme kontrolü
+    const checkFontLoaded = () => {
+      document.fonts.ready.then(() => {
+        setFontLoaded(true);
+      });
+    };
+    checkFontLoaded();
 
     // Cihaz tipini kontrol et
     const checkMobile = () => {
@@ -84,13 +95,27 @@ export default function ComingSoon() {
   const t = translations[language];
 
   return (
-    <div className="min-h-screen bg-black relative overflow-hidden">
+    <div
+      className="min-h-screen relative overflow-hidden"
+      style={{ backgroundColor: "#2C2C2C" }}
+    >
+      {/* Font preload link */}
+      <link
+        rel="preload"
+        href="https://db.onlinewebfonts.com/c/29d7ec48c3b7b1104c253419abdd6d39?family=Space+Colony+W03+SemiBold"
+        as="style"
+      />
+      <link
+        rel="stylesheet"
+        href="https://db.onlinewebfonts.com/c/29d7ec48c3b7b1104c253419abdd6d39?family=Space+Colony+W03+SemiBold"
+      />
+
       {/* Language Selector - Sağ Üst */}
       <div className="absolute top-4 right-4 sm:top-6 sm:right-6 lg:top-8 lg:right-8 z-50 flex items-center gap-2 sm:gap-3">
         <div
           className={`transition-all duration-200 ${
             language === "tr"
-              ? "opacity-100 scale-110 ring-2 ring-white/30 rounded"
+              ? "opacity-100 scale-110 ring-2 ring-[#BC461B]/50 rounded"
               : "opacity-70 hover:opacity-100"
           }`}
         >
@@ -99,11 +124,11 @@ export default function ComingSoon() {
             className="drop-shadow-lg"
           />
         </div>
-        <div className="w-px h-4 bg-white/20"></div>
+        <div className="w-px h-4 bg-[#BC461B]/30"></div>
         <div
           className={`transition-all duration-200 ${
             language === "en"
-              ? "opacity-100 scale-110 ring-2 ring-white/30 rounded"
+              ? "opacity-100 scale-110 ring-2 ring-[#BC461B]/50 rounded"
               : "opacity-70 hover:opacity-100"
           }`}
         >
@@ -168,16 +193,30 @@ export default function ComingSoon() {
         </svg>
       </div>
 
-      {/* Rotating Gears - Responsive positioning */}
-      <div className="absolute top-16 right-4 sm:top-20 sm:right-8 lg:top-24 lg:right-20 opacity-10 sm:opacity-20">
+      {/* Rotating Gears - Rengi güncellendi */}
+      <div className="absolute top-16 right-4 sm:top-20 sm:right-8 lg:top-24 lg:right-20 opacity-20 sm:opacity-30">
         <div className="w-16 h-16 sm:w-24 sm:h-24 lg:w-32 lg:h-32 animate-spin-slow">
           <svg
             viewBox="0 0 100 100"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
           >
-            <circle cx="50" cy="50" r="40" stroke="white" strokeWidth="2" />
-            <circle cx="50" cy="50" r="30" stroke="white" strokeWidth="1" />
+            <circle
+              cx="50"
+              cy="50"
+              r="40"
+              stroke="#BC461B"
+              strokeWidth="2"
+              strokeOpacity="0.5"
+            />
+            <circle
+              cx="50"
+              cy="50"
+              r="30"
+              stroke="#BC461B"
+              strokeWidth="1"
+              strokeOpacity="0.3"
+            />
             {[...Array(8)].map((_, i) => (
               <line
                 key={i}
@@ -185,8 +224,9 @@ export default function ComingSoon() {
                 y1="10"
                 x2="50"
                 y2="20"
-                stroke="white"
+                stroke="#BC461B"
                 strokeWidth="2"
+                strokeOpacity="0.4"
                 transform={`rotate(${i * 45} 50 50)`}
               />
             ))}
@@ -194,15 +234,29 @@ export default function ComingSoon() {
         </div>
       </div>
 
-      <div className="absolute bottom-10 left-4 sm:bottom-16 sm:left-8 lg:bottom-20 lg:left-20 opacity-8 sm:opacity-15">
+      <div className="absolute bottom-10 left-4 sm:bottom-16 sm:left-8 lg:bottom-20 lg:left-20 opacity-15 sm:opacity-25">
         <div className="w-12 h-12 sm:w-20 sm:h-20 lg:w-24 lg:h-24 animate-spin-reverse">
           <svg
             viewBox="0 0 100 100"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
           >
-            <circle cx="50" cy="50" r="35" stroke="white" strokeWidth="2" />
-            <circle cx="50" cy="50" r="25" stroke="white" strokeWidth="1" />
+            <circle
+              cx="50"
+              cy="50"
+              r="35"
+              stroke="#BC461B"
+              strokeWidth="2"
+              strokeOpacity="0.5"
+            />
+            <circle
+              cx="50"
+              cy="50"
+              r="25"
+              stroke="#BC461B"
+              strokeWidth="1"
+              strokeOpacity="0.3"
+            />
             {[...Array(6)].map((_, i) => (
               <line
                 key={i}
@@ -210,8 +264,9 @@ export default function ComingSoon() {
                 y1="15"
                 x2="50"
                 y2="25"
-                stroke="white"
+                stroke="#BC461B"
                 strokeWidth="2"
+                strokeOpacity="0.4"
                 transform={`rotate(${i * 60} 50 50)`}
               />
             ))}
@@ -220,19 +275,44 @@ export default function ComingSoon() {
       </div>
 
       {/* Main Content */}
-      <div className="relative z-10 flex flex-col items-center justify-center min-h-screen px-4 sm:px-6 lg:px-4 text-center">
+      <div
+        className={`relative z-10 flex flex-col items-center justify-center min-h-screen px-4 sm:px-6 lg:px-4 text-center transition-opacity duration-300 ${
+          fontLoaded ? "opacity-100" : "opacity-0"
+        }`}
+      >
         {/* Brand Name */}
-        <div className="animate-fade-in mb-6 sm:mb-8">
-          <h1 className="text-4xl xs:text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-bold text-white font-mono tracking-wider leading-none">
+        <div className="animate-fade-in mb-2 sm:mb-3">
+          <h1
+            className="text-4xl xs:text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-bold font-mono tracking-wider leading-none"
+            style={{
+              color: "#BC461B",
+              fontFamily: "'Space Colony W03 SemiBold', monospace",
+            }}
+          >
             {t.brandName}
           </h1>
-          <div className="w-16 sm:w-24 lg:w-32 h-0.5 sm:h-1 bg-gradient-to-r from-transparent via-white to-transparent mx-auto mt-2 sm:mt-4"></div>
+
+          {/* Alt Başlık - BUHAR JENERATÖRLERİ */}
+          <h2
+            className="text-lg xs:text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold font-mono tracking-widest mt-2 sm:mt-3"
+            style={{
+              color: "#4D4B4C",
+              fontFamily: "'Space Colony W03 SemiBold', monospace",
+            }}
+          >
+            {t.subTitle}
+          </h2>
+
+          <div className="w-16 sm:w-24 lg:w-32 h-0.5 sm:h-1 bg-gradient-to-r from-transparent via-[#BC461B] to-transparent mx-auto mt-3 sm:mt-5"></div>
         </div>
 
         {/* Company Description */}
         <div className="animate-fade-in-delayed-2 mb-8 sm:mb-12 max-w-xs sm:max-w-lg lg:max-w-2xl px-2">
           <div className="h-16 sm:h-20 lg:h-24 flex items-center justify-center">
-            <p className="text-sm sm:text-base md:text-lg lg:text-xl text-gray-400 leading-relaxed font-light text-center">
+            <p
+              className="text-sm sm:text-base md:text-lg lg:text-xl text-gray-400 leading-relaxed font-light text-center"
+              style={{ fontFamily: "'Space Colony W03 SemiBold', monospace" }}
+            >
               {t.description}
             </p>
           </div>
@@ -244,24 +324,33 @@ export default function ComingSoon() {
             {/* <span>İlerleme</span> */}
             {/* <span>75%</span> */}
           </div>
-          <div className="w-full bg-gray-800 rounded-full h-1.5 sm:h-2">
-            <div className="bg-gradient-to-r from-gray-600 to-white h-1.5 sm:h-2 rounded-full animate-progress-load"></div>
+          <div className="w-full bg-gray-700 rounded-full h-1.5 sm:h-2">
+            <div className="bg-gradient-to-r from-[#BC461B] to-[#E85A2C] h-1.5 sm:h-2 rounded-full animate-progress-load"></div>
           </div>
         </div>
 
         {/* Status Text */}
         <div className="animate-opacity-sync">
-          <p className="text-gray-500 text-xs sm:text-sm font-mono tracking-widest">
+          <p
+            className="text-gray-500 text-xs sm:text-sm font-mono tracking-widest"
+            style={{ fontFamily: "'Space Colony W03 SemiBold', monospace" }}
+          >
             {t.status}
           </p>
         </div>
       </div>
 
       <style jsx>{`
-        @import url("https://db.onlinewebfonts.com/c/29d7ec48c3b7b1104c253419abdd6d39?family=Space+Colony+W03+SemiBold");
-
-        * {
-          font-family: "Space Colony W03 SemiBold", monospace !important;
+        /* Font face tanımı en başta */
+        @font-face {
+          font-family: "Space Colony W03 SemiBold";
+          src: url("https://db.onlinewebfonts.com/t/29d7ec48c3b7b1104c253419abdd6d39.woff2")
+              format("woff2"),
+            url("https://db.onlinewebfonts.com/t/29d7ec48c3b7b1104c253419abdd6d39.woff")
+              format("woff");
+          font-display: block;
+          font-weight: 600;
+          font-style: normal;
         }
 
         /* Mobile First Animations */
