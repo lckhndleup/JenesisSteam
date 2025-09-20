@@ -3,7 +3,7 @@ User-agent: *
 Allow: /
 
 # Host
-Host: https://jenesissteam.com
+Host: https://jenesis.com.tr
 
 # Sitemaps
-Sitemap: https://jenesissteam.com/sitemap.xml
+Sitemap: https://jenesis.com.tr/sitemap.xml
